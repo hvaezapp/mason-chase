@@ -1,13 +1,14 @@
 ﻿using Mc2.CrudTest.Core.Commands.Customer;
+using Mc2.CrudTest.Core.Handlers.Queries.Customer;
 using Mc2.CrudTest.Core.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Cms.Api.Controllers
+namespace Mc2.CrudTest.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class CustomerController : BaseController
+    public class CustomerController : ControllerBase
     {
         public IMediator _mediatR { get; }
 
@@ -20,33 +21,44 @@ namespace Cms.Api.Controllers
 
 
 
-        [HttpPost,ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add(AddCustomerVm customer,CancellationToken cancellationToken)
+        [HttpPost]
+        public async Task<IActionResult> AddCutomer(AddCustomerCommand customer,CancellationToken cancellationToken)
         {
-            var command = new AddCustomerCommond
-            {
-                Firstname = customer.Firstname,
-                Lastname = customer.Lastname,
-                PhoneNumber = customer.PhoneNumber,
-                Email = customer.Email,
-                DateOfBirth = customer.DateOfBirth,
-                BankAccountNumber = customer.BankAccountNumber
-            };
-
-            var result = await _mediatR.Send(command, cancellationToken);
-            return CustomOk(result);
+            var result = await _mediatR.Send(customer, cancellationToken);
+            return Ok(result);
         }
 
 
 
-        // post/grtlatestposts
-        //[HttpGet("GetLatestPosts")]
-        //public async Task<IActionResult> GetLatestPosts()
-        //{
-        //    var query = new GetLatestPostsQuery();
-        //    var result = await _mediatR.Send(query);
-        //    return CustomOk(result);
-        //}
+        [HttpPut]
+        public async Task<IActionResult> EditCustomer(EditCustomerCommand customer, CancellationToken cancellationToken)
+        {
+            var result = await _mediatR.Send(customer, cancellationToken);
+            return Ok(result);
+        }
+
+
+
+      
+        [HttpGet]
+        public async Task<IActionResult> GetCustomers(int count , CancellationToken cancellationToken)
+        {
+            var result = await _mediatR.Send(new GetCustomersQuery { count = count } , cancellationToken);
+            return Ok(result);
+        }
+
+
+
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(DeleteCustomerCommand customer, CancellationToken cancellationToken)
+        {
+            var result = await _mediatR.Send(customer, cancellationToken);
+            return Ok(result);
+        }
+
+
+        
 
 
 

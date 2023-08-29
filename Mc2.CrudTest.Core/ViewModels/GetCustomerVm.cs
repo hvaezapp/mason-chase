@@ -1,20 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Mc2.CrudTest.Core.ViewModels
 {
-    public class AddCustomerVm
+    public class GetCustomerVm
     {
-        [Required]
+        public long Id { get; set; }
         public string Firstname { get; set; }
-        [Required]
         public string Lastname { get; set; }
-        [Required]
         public DateTime DateOfBirth { get; set; }
-        [Required]
         public ulong PhoneNumber { get; set; }
-        [Required]
         public string Email { get; set; }
-        [Required]
         public string BankAccountNumber { get; set; }
     }
 }

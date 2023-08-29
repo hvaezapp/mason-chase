@@ -10,11 +10,4 @@
     <PackageReference Include="MediatR" Version="12.1.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Domains\" />
-    <Folder Include="Dtos\" />
-    <Folder Include="Handlers\Queries\Customer\" />
-    <Folder Include="Queries\Customer\" />
-  </ItemGroup>
-
 </Project>
