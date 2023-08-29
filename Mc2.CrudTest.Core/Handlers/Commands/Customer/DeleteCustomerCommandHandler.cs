@@ -21,7 +21,7 @@ namespace Mc2.CrudTest.Core.Handlers.Commands.Customer
             try
             {
 
-                await _customerRepository.DeleteById(request.CustomerId, cancellationToken);
+                await _customerRepository.DeleteById(request.Id, cancellationToken);
 
                 return response.CustomOk();
 

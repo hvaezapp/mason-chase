@@ -23,9 +23,10 @@ builder.Services.AddDbContext<CrudDbContext>(options =>
 DependencyContainer.RegisterServices(builder.Services);
 
 
+
 // Fluent Validation config
-builder.Services.AddControllers()
-    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AddCustomerCommandValidator>());
+builder.Services.AddControllers();
+    //.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AddCustomerCommandValidator>());
 
 
 builder.Services.AddEndpointsApiExplorer();

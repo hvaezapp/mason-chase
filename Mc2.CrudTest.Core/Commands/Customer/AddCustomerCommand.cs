@@ -2,13 +2,7 @@
 using Mc2.CrudTest.Core.Dtos;
 using Mc2.CrudTest.Core.Utility;
 using MediatR;
-using PhoneNumbers;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mc2.CrudTest.Core.Commands.Customer
 {
@@ -19,7 +13,7 @@ namespace Mc2.CrudTest.Core.Commands.Customer
         public string Firstname { get; set; }
 
 
-       // [Required]
+        // [Required]
         public string Lastname { get; set; }
 
         [DataType(DataType.Date)]
@@ -83,7 +77,7 @@ namespace Mc2.CrudTest.Core.Commands.Customer
         }
 
 
-       
+
 
     }
 

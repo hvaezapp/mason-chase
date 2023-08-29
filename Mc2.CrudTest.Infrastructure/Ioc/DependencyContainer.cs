@@ -1,4 +1,6 @@
-﻿using Mc2.CrudTest.Core.Commands.Customer;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using Mc2.CrudTest.Core.Commands.Customer;
 using Mc2.CrudTest.Core.Dtos;
 using Mc2.CrudTest.Core.Handlers.Commands.Customer;
 using Mc2.CrudTest.Core.Handlers.Queries.Customer;
@@ -21,8 +23,23 @@ namespace Mc2.CrudTest.Infrastructure.Ioc
         public static void RegisterServices(IServiceCollection services)
         {
 
-            #region
             services.AddScoped<ICustomerRepository, CustomerRepository>();
+
+
+            // Fluent Validation Config
+            #region
+            //services.AddScoped<IValidator<AddCustomerCommand>, AddCustomerCommandValidator>();
+            //services.AddScoped<IValidator<DeleteCustomerCommand>, DeleteCustomerCommandValidator>();
+            //services.AddScoped<IValidator<EditCustomerCommand>, EditCustomerCommandValidator>();
+
+            services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AddCustomerCommandValidator>());
+            services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<EditCustomerCommandValidator>());
+            services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<DeleteCustomerCommandValidator>());
+            #endregion
+
+
+            // MediatR Config
+            #region
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
             services.AddScoped<IRequestHandler<AddCustomerCommand, RequestResponse>, AddCustomerCommandHandler>();
             services.AddScoped<IRequestHandler<EditCustomerCommand, RequestResponse>, EditCustomerCommandHandler>();

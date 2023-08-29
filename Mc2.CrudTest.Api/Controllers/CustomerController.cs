@@ -54,7 +54,7 @@ namespace Mc2.CrudTest.Api.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(long customerId, CancellationToken cancellationToken)
         {
-            var result = await _mediatR.Send(new DeleteCustomerCommand { CustomerId = customerId }, cancellationToken);
+            var result = await _mediatR.Send(new DeleteCustomerCommand { Id = customerId }, cancellationToken);
             return Ok(result);
         }
 
