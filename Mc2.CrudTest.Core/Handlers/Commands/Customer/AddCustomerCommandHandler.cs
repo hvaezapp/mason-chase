@@ -26,9 +26,9 @@ namespace Mc2.CrudTest.Core.Handlers.Commands.Customer
 
             try
             {
-                ulong validationResult = AppUtility.GetPhoneNumberValidation(request.PhoneNumber);
+                //ulong validationResult = AppUtility.GetPhoneNumberValidation(request.PhoneNumber);
 
-                if (validationResult != 0)
+                if (AppUtility.PhoneNumberIsValid(request.PhoneNumber))
                 {
 
                     if (AppUtility.IbanIsValid(request.BankAccountNumber))

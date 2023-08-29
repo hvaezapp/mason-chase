@@ -2,6 +2,7 @@
 using Mc2.CrudTest.Core.Dtos;
 using Mc2.CrudTest.Core.Utility;
 using MediatR;
+using PhoneNumbers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -60,7 +61,9 @@ namespace Mc2.CrudTest.Core.Commands.Customer
 
             RuleFor(x => x.PhoneNumber)
                 .NotEmpty()
-                .WithMessage(AppConsts.EnterMessage);
+                .WithMessage(AppConsts.EnterMessage)
+                .Must(AppUtility.PhoneNumberIsValid)
+                .WithMessage(AppConsts.EnterValidPhoneNumber);
 
 
 
@@ -80,8 +83,10 @@ namespace Mc2.CrudTest.Core.Commands.Customer
         }
 
 
+       
+
     }
-        
+
 
 
 

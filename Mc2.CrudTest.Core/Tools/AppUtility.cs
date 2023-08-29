@@ -10,31 +10,33 @@ namespace Mc2.CrudTest.Core.Utility
 {
     public static class AppUtility
     {
-        public static ulong GetPhoneNumberValidation(string phoneNumber)
+        public static bool PhoneNumberIsValid(string phoneNumber)
         {
 
-            ulong res = 0;
+            // ulong res = 0;
 
             try
             {
                 PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.GetInstance();
                 PhoneNumber phoneNumberObject = phoneNumberUtil.Parse(phoneNumber, null);
-
-                if (phoneNumberUtil.IsValidNumberForRegion(phoneNumberObject, "US"))
-                {
-                    res = ulong.Parse(phoneNumberObject.NationalNumber.ToString());
-                }
-                else
-                    res = 0;
+                return phoneNumberUtil.IsValidNumberForRegion(phoneNumberObject, "US");
+                //if (phoneNumberUtil.IsValidNumberForRegion(phoneNumberObject, "US"))
+                //{
+                //    res = ulong.Parse(phoneNumberObject.NationalNumber.ToString());
+                //}
+                //else
+                //    res = 0;
 
             }
             catch (NumberParseException)
             {
-                res = 0;
+                //res = 0;
                 // Handle parsing errors here.
+
+                return false;
             }
 
-            return res;
+            //return res;
 
         }
 

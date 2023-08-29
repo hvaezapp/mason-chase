@@ -8,7 +8,7 @@ namespace Mc2.CrudTest.Core.Dtos
 {
     public class RequestResponse
     {
-        public object data { get; set; } = new { };
+        public object data { get; set; }
         public string message { get; set; } = "Ok";
         public int status { get; set; } = 200;
 
