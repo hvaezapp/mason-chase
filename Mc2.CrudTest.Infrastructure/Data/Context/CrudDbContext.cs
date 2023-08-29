@@ -21,6 +21,7 @@ namespace Mc2.CrudTest.Infrastructure.Data
     }
 
 
+    #region ContextFactory
     public class BloggingContextFactory : IDesignTimeDbContextFactory<CrudDbContext>
     {
         public CrudDbContext CreateDbContext(string[] args)
@@ -32,5 +33,5 @@ namespace Mc2.CrudTest.Infrastructure.Data
             return new CrudDbContext(optionsBuilder.Options);
         }
     }
-
+    #endregion
 }

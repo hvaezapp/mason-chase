@@ -1,6 +1,6 @@
 ﻿using Mc2.CrudTest.Core.Commands.Customer;
+using Mc2.CrudTest.Core.Dtos;
 using Mc2.CrudTest.Core.Interfaces.Repository;
-using Mc2.CrudTest.Core.ViewModels;
 using Mc2.CrudTest.Infrastructure.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,7 +28,7 @@ namespace Mc2.CrudTest.Infrastructure.Data
                     BankAccountNumber = request.BankAccountNumber,
                     DateOfBirth = request.DateOfBirth,
                     Email = request.Email,
-                    PhoneNumber = request.PhoneNumber
+                    PhoneNumber = ulong.Parse(request.PhoneNumber)
                 };
 
                 await _dbContext.Customers.AddAsync(customer, cancellationToken);
@@ -49,17 +49,17 @@ namespace Mc2.CrudTest.Infrastructure.Data
 
 
         #region Get Customers
-        public async Task<List<GetCustomerVm>> GetCustomers(int count, CancellationToken cancellationToken)
+        public async Task<List<GetCustomerDto>> GetCustomers(int count, CancellationToken cancellationToken)
         {
             try
             {
-                return await _dbContext.Customers.Take(count).Select(s => new GetCustomerVm
+                return await _dbContext.Customers.Take(count).Select(s => new GetCustomerDto
                 {
                     Id = s.Id,
                     BankAccountNumber = s.BankAccountNumber,
-                    DateOfBirth = s.DateOfBirth,
+                    DateOfBirth = s.DateOfBirth.ToShortDateString(),
                     Email = s.Email,
-                    PhoneNumber = s.PhoneNumber,
+                    PhoneNumber = string.Concat("+", s.PhoneNumber.ToString()),
                     Firstname = s.Firstname,
                     Lastname = s.Lastname,
 
@@ -85,7 +85,7 @@ namespace Mc2.CrudTest.Infrastructure.Data
                 Customer customer = await FindById(request.Id , cancellationToken);
                 if (customer != null)
                 {
-                    customer.PhoneNumber = request.PhoneNumber;
+                    customer.PhoneNumber = ulong.Parse(request.PhoneNumber);
                     customer.Firstname = request.Firstname;
                     customer.Lastname = request.Lastname;
                     customer.DateOfBirth = request.DateOfBirth;
@@ -142,20 +142,20 @@ namespace Mc2.CrudTest.Infrastructure.Data
 
 
         #region Get  Customer By Id
-        public async Task<GetCustomerVm> GetById(long id, CancellationToken cancellationToken)
+        public async Task<GetCustomerDto> GetById(long id, CancellationToken cancellationToken)
         {
             try
             {
 
-                return await _dbContext.Customers.Where(a => a.Id == id).Select(c => new GetCustomerVm
+                return await _dbContext.Customers.Where(a => a.Id == id).Select(c => new GetCustomerDto
                 {
 
                     BankAccountNumber = c.BankAccountNumber,
-                    DateOfBirth = c.DateOfBirth,
+                    DateOfBirth = c.DateOfBirth.ToShortDateString(),
                     Email = c.Email,
                     Firstname = c.Firstname,
                     Lastname = c.Lastname,
-                    PhoneNumber = c.PhoneNumber
+                    PhoneNumber = string.Concat("+", c.PhoneNumber.ToString())
 
                 }).SingleOrDefaultAsync(cancellationToken);
 

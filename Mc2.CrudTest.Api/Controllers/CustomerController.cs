@@ -1,6 +1,5 @@
 ﻿using Mc2.CrudTest.Core.Commands.Customer;
 using Mc2.CrudTest.Core.Handlers.Queries.Customer;
-using Mc2.CrudTest.Core.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +11,8 @@ namespace Mc2.CrudTest.Api.Controllers
     {
         public IMediator _mediatR { get; }
 
+        // private int takeCount  = 10;
+
         public CustomerController(IMediator mediatR)
         {
 
@@ -22,7 +23,7 @@ namespace Mc2.CrudTest.Api.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> AddCutomer(AddCustomerCommand customer,CancellationToken cancellationToken)
+        public async Task<IActionResult> AddCutomer(AddCustomerCommand customer, CancellationToken cancellationToken)
         {
             var result = await _mediatR.Send(customer, cancellationToken);
             return Ok(result);
@@ -39,11 +40,11 @@ namespace Mc2.CrudTest.Api.Controllers
 
 
 
-      
+
         [HttpGet]
-        public async Task<IActionResult> GetCustomers(int count , CancellationToken cancellationToken)
+        public async Task<IActionResult> GetCustomers(int count = 10, CancellationToken cancellationToken = default)
         {
-            var result = await _mediatR.Send(new GetCustomersQuery { count = count } , cancellationToken);
+            var result = await _mediatR.Send(new GetCustomersQuery { count = count }, cancellationToken);
             return Ok(result);
         }
 
@@ -51,14 +52,14 @@ namespace Mc2.CrudTest.Api.Controllers
 
 
         [HttpDelete]
-        public async Task<IActionResult> Delete(DeleteCustomerCommand customer, CancellationToken cancellationToken)
+        public async Task<IActionResult> Delete(long customerId, CancellationToken cancellationToken)
         {
-            var result = await _mediatR.Send(customer, cancellationToken);
+            var result = await _mediatR.Send(new DeleteCustomerCommand { CustomerId = customerId }, cancellationToken);
             return Ok(result);
         }
 
 
-        
+
 
 
 

@@ -1,17 +1,23 @@
 ﻿using Mc2.CrudTest.Core.Commands.Customer;
 using Mc2.CrudTest.Core.Dtos;
 using Mc2.CrudTest.Core.Interfaces.Repository;
+using Mc2.CrudTest.Core.Utility;
 using MediatR;
+using Microsoft.Extensions.Logging;
+using PhoneNumbers;
 
 namespace Mc2.CrudTest.Core.Handlers.Commands.Customer
 {
     public class AddCustomerCommandHandler : IRequestHandler<AddCustomerCommand, RequestResponse>
     {
-        public ICustomerRepository _customerRepository { get; }
+        private readonly ICustomerRepository _customerRepository;
+        private readonly ILogger<AddCustomerCommandHandler> _logger;
 
-        public AddCustomerCommandHandler(ICustomerRepository customerRepository)
+        public AddCustomerCommandHandler(ICustomerRepository customerRepository,
+                                         ILogger<AddCustomerCommandHandler> logger)
         {
             _customerRepository = customerRepository;
+            _logger = logger;
         }
 
         public async Task<RequestResponse> Handle(AddCustomerCommand request, CancellationToken cancellationToken)
@@ -20,24 +26,41 @@ namespace Mc2.CrudTest.Core.Handlers.Commands.Customer
 
             try
             {
+                ulong validationResult = AppUtility.GetPhoneNumberValidation(request.PhoneNumber);
 
-                //if(string.IsNullOrEmpty(request.Email) || )
+                if (validationResult != 0)
+                {
+
+                    if (AppUtility.IbanIsValid(request.BankAccountNumber))
+                    {
+                        //request.PhoneNumber = validationResult.ToString();
+                        await _customerRepository.Add(request, cancellationToken);
+
+                        return response.CustomOk();
+
+                    }else
+                        return response.CustomError(message: "IBAN invalid");
 
 
-                await _customerRepository.Add(request, cancellationToken);
-
-                return response.CustomOk();
+                }
+                return response.CustomError(message: "PhoneNumber invalid");
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+
+                _logger.Log(LogLevel.Error , ex.ToString());
+
                 return response.CustomError();
+
+                //return response.CustomError(message:ex.InnerException.Message);
                 //return response.CustomError(AppConsts.OperationFail);
             }
 
         }
 
 
+      
 
     }
 }

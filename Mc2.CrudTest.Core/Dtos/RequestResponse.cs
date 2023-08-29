@@ -14,26 +14,29 @@ namespace Mc2.CrudTest.Core.Dtos
 
 
 
-        public RequestResponse CustomOk(object data = null)
+        public RequestResponse CustomOk(object data = null , string message = "")
         {
             return new RequestResponse
             {
                 data = data,
-                message = "Ok",
+                message = (message != "" ? message : "OK"),
                 status = 200
             };
         }
 
 
-        public RequestResponse CustomError(object data = null)
+        public RequestResponse CustomError(object data = null, string message = "")
         {
             return new RequestResponse
             {
                 data = data,
-                message = "Error",
+                message = (message != "" ? message : "Error"),
                 status = 500
             };
         }
+
+
+      
 
 
     }

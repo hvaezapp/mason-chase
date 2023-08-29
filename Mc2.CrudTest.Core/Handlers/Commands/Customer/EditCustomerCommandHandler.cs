@@ -1,13 +1,14 @@
 ﻿using Mc2.CrudTest.Core.Commands.Customer;
 using Mc2.CrudTest.Core.Dtos;
 using Mc2.CrudTest.Core.Interfaces.Repository;
+using Mc2.CrudTest.Core.Utility;
 using MediatR;
 
 namespace Mc2.CrudTest.Core.Handlers.Commands.Customer
 {
     public class EditCustomerCommandHandler : IRequestHandler<EditCustomerCommand, RequestResponse>
     {
-        public ICustomerRepository _customerRepository { get; }
+        private readonly ICustomerRepository _customerRepository;
 
         public EditCustomerCommandHandler(ICustomerRepository customerRepository)
         {
@@ -21,9 +22,23 @@ namespace Mc2.CrudTest.Core.Handlers.Commands.Customer
             try
             {
 
-                await _customerRepository.Edit(request, cancellationToken);
+                ulong validationResult = AppUtility.GetPhoneNumberValidation(request.PhoneNumber);
 
-                return response.CustomOk();
+                if (validationResult != 0)
+                {
+                    if (AppUtility.IbanIsValid(request.BankAccountNumber))
+                    {
+                        //request.PhoneNumber = validationResult.ToString();
+                        await _customerRepository.Edit(request, cancellationToken);
+
+                        return response.CustomOk();
+
+                    }
+                    else
+                        return response.CustomError(message: "IBAN invalid");
+
+                }
+                return response.CustomError(message: "PhoneNumber invalid");
 
             }
             catch (Exception)

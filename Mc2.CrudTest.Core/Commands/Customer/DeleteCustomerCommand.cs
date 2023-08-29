@@ -13,10 +13,7 @@ namespace Mc2.CrudTest.Core.Commands.Customer
     {
         public long CustomerId { get; set; }
         
-
     }
-
-
 
 
     

@@ -7,7 +7,7 @@ namespace Mc2.CrudTest.Core.Handlers.Commands.Customer
 {
     public class DeleteCustomerCommandHandler : IRequestHandler<DeleteCustomerCommand, RequestResponse>
     {
-        public ICustomerRepository _customerRepository { get; }
+        private readonly ICustomerRepository _customerRepository;
 
         public DeleteCustomerCommandHandler(ICustomerRepository customerRepository)
         {
