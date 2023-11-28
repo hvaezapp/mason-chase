@@ -25,7 +25,10 @@ namespace Mc2.CrudTest.Core.Features.Customer.Handlers.Commands
             try
             {
                 var customer = await _customerRepository.GetByIdAsync(request.Id,cancellationToken);
-                await _customerRepository.Delete(customer);
+
+                customer.Delete();
+               
+                await _customerRepository.SaveChanges(cancellationToken);
 
                 response.Success();
 

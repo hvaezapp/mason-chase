@@ -44,12 +44,22 @@ namespace Mc2.CrudTest.Core.Features.Customer.Handlers.Commands
                 else
                 {
 
-                    var oldCustomer = _mapper.Map<Domain.Entities.Customer>(request.EditCustomerDto);
+                    var customer = await _customerRepository.GetByIdAsync(request.EditCustomerDto.Id , cancellationToken);
+                    customer.Edit(request.EditCustomerDto.Firstname,
+                                                request.EditCustomerDto.Lastname, request.EditCustomerDto.DateOfBirth,
+                                                request.EditCustomerDto.PhoneNumber,
+                                                request.EditCustomerDto.Email, request.EditCustomerDto.BankAccountNumber);
 
-                    oldCustomer = await _customerRepository.Update(oldCustomer);
+                    //var oldCustomer = _mapper.Map<Domain.Entities.Customer>(request.EditCustomerDto);
+
+                    //oldCustomer = await _customerRepository.Update(oldCustomer);
+
                     await _customerRepository.SaveChanges(cancellationToken);
 
-                    response.Success(data: _mapper.Map<GetCustomerDto>(oldCustomer));
+                    //response.Success(data: _mapper.Map<GetCustomerDto>(customer));
+
+                    response.Success();
+
                 }
 
             }
