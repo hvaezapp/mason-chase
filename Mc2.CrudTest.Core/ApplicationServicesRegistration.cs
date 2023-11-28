@@ -13,8 +13,7 @@ namespace Mc2.CrudTest.Core
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddMediatR(Assembly.GetExecutingAssembly());
-
-            //services.AddMemoryCache();
+            services.AddMemoryCache();
 
 
         }

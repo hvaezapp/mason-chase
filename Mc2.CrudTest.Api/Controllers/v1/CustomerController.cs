@@ -20,7 +20,7 @@ namespace Mc2.CrudTest.Api.Controllers.v1
 
 
          // Create Customer
-        [HttpPost("[acttion]")]
+        [HttpPost("[action]")]
         public async Task<IActionResult> Create([FromBody] CreateCustomerDto dto, CancellationToken cancellationToken)
         {
             var result = await _mediatR.Send(new CreateCustomerCommand { CreateCustomerDto = dto }, cancellationToken);
@@ -31,7 +31,7 @@ namespace Mc2.CrudTest.Api.Controllers.v1
 
 
         // Edit Customer
-        [HttpPut("[acttion]")]
+        [HttpPut("[action]")]
         public async Task<IActionResult> Edit([FromBody] EditCustomerDto dto, CancellationToken cancellationToken)
         {
             var result = await _mediatR.Send(new EditCustomerCommand { EditCustomerDto = dto }, cancellationToken);
@@ -42,7 +42,7 @@ namespace Mc2.CrudTest.Api.Controllers.v1
 
 
         // Get All Customers With Paging
-        [HttpGet("[acttion]/{page}")]
+        [HttpGet("[action]/{page}")]
         public async Task<IActionResult> GetAll(int page, CancellationToken cancellationToken = default)
         {
             var result = await _mediatR.Send(new GetCustomersListRequest { Page = page }, cancellationToken);
@@ -53,7 +53,7 @@ namespace Mc2.CrudTest.Api.Controllers.v1
 
 
         // Delete Customer With Id
-        [HttpDelete("[acttion]/{id}")]
+        [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> Delete(long id, CancellationToken cancellationToken)
         {
             var result = await _mediatR.Send(new DeleteCustomerCommand { Id = id }, cancellationToken);

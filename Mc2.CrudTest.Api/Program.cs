@@ -40,25 +40,11 @@ builder.Services.AddSwaggerGen();
 
 AddSwagger(builder.Services);
 
-builder.Services.AddCors(o =>
-{
-    o.AddPolicy("CorsPolicy", b =>
-    b.AllowAnyOrigin()
-    .AllowAnyMethod()
-    .AllowAnyHeader()
-    );
-});
 
 var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI(
-    Options =>
-    {
-        Options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-    });
 
-app.UseCors();
+
 
 
 // Configure the HTTP request pipeline.
@@ -70,16 +56,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("CorsPolicy");
-
-app.UseDeveloperExceptionPage();
-
-app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseRouting();
 
 
 app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.UseCustomExceptionHandler();
