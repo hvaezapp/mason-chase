@@ -52,12 +52,13 @@ namespace Mc2.CrudTest.Core.Features.Customer.Handlers.Queries
                 }
                 else
                 {
-                     
-                     customers = await _customerRepository.GetAllWithPagingWithDapper(skip , AppConsts.TakeCount);
+                     //Read Via Dapper ORM
+                     customers = await _customerRepository.GetAllWithPagingWithDapper(skip , AppConsts.TakeCount, cancellationToken);
 
+                    //Read Via EF ORM
                     // customers = await _customerRepository.GetAllAsyncWithPaging(skip, AppConsts.TakeCount, cancellationToken);
 
-                    
+
                 }
 
                 var data = _mapper.Map<List<GetCustomerDto>>(customers);

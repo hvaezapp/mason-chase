@@ -23,7 +23,7 @@ namespace Mc2.CrudTest.Infrastructure.Persistence.Repositories
         }
 
 
-        public async Task<IEnumerable<Customer>> GetAllWithPagingWithDapper(int skip, int take)
+        public async Task<IEnumerable<Customer>> GetAllWithPagingWithDapper(int skip, int take , CancellationToken cancellationToken)
         {
             try
             {
