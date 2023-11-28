@@ -1,39 +1,65 @@
-using FluentValidation.AspNetCore;
-using Mc2.CrudTest.Core.Commands.Customer;
-using Mc2.CrudTest.Core.Dtos;
-using Mc2.CrudTest.Core.Handlers.Commands.Customer;
-using Mc2.CrudTest.Core.Handlers.Queries.Customer;
-using Mc2.CrudTest.Core.Interfaces.Repository;
-using Mc2.CrudTest.Infrastructure.Data;
-using Mc2.CrudTest.Infrastructure.Ioc;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
+using Mc2.CrudTest.Api.Middlewares;
+using Mc2.CrudTest.Core;
+using Mc2.CrudTest.Infrastructure;
+using Microsoft.OpenApi.Models;
+using Serilog;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-// Add services to the container.
+//var connectionString = builder.Configuration.GetConnectionString("SqlServer");
 
-builder.Services.AddDbContext<CrudDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("CrudDatabase")));
+//builder.Host.UseSerilog((hostBuilderContext, logConfig) =>
+//{
 
-//ioc
-DependencyContainer.RegisterServices(builder.Services);
+//    logConfig.WriteTo.MSSqlServer(connectionString, "Logs", autoCreateSqlTable: true).MinimumLevel.Error();
+
+//    /* if (hostBuilderContext.HostingEnvironment.IsDevelopment())
+//     {
+//         logConfig.WriteTo.Console().MinimumLevel.Debug();
+
+//     }
+//     else
+//     {
+
+//     }*/
+//});
 
 
-
-// Fluent Validation config
 builder.Services.AddControllers();
-    //.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AddCustomerCommandValidator>());
+
+
+builder.Services.ConfigureApplicationServices();
+builder.Services.ConfigurePersistenceServices(builder.Configuration);
 
 
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen();
 
+AddSwagger(builder.Services);
+
+builder.Services.AddCors(o =>
+{
+    o.AddPolicy("CorsPolicy", b =>
+    b.AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    );
+});
 
 var app = builder.Build();
+
+app.UseSwagger();
+app.UseSwaggerUI(
+    Options =>
+    {
+        Options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+    });
+
+app.UseCors();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -42,10 +68,42 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseAuthorization();
-app.UseAuthorization();
+app.UseHttpsRedirection();
+
+app.UseCors("CorsPolicy");
+
+app.UseDeveloperExceptionPage();
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
 
 
-app.MapControllers();
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseCustomExceptionHandler();
+
+
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller}/{action=Index}/{id?}");
+
+//app.MapFallbackToFile("index.html");
+
 
 app.Run();
+
+void AddSwagger(IServiceCollection services)
+{
+    services.AddSwaggerGen(o =>
+    {
+        o.SwaggerDoc("v1", new OpenApiInfo()
+        {
+            Version = "v1",
+            Title = "CrudTest Api"
+        });
+
+    });
+}
+
